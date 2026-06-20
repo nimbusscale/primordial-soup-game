@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M8 — Engine: Phase 5 natural deaths** (M0–M7 complete).
+**M9 — Engine: Phase 6 scoring + game end** (M0–M8 complete).
 
 ## What this is
 
