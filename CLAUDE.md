@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M11 — `GameStore` + server loop** (M0–M10 complete; engine plays a full headless 3p game).
+**M12 — Join-link flow end to end** (M0–M11 complete; server runs the validate→reduce→broadcast loop).
 
 ## What this is
 
