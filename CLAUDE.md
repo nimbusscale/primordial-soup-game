@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M10 — Engine integration: full headless 3p game** (M0–M9 complete).
+**M11 — `GameStore` + server loop** (M0–M10 complete; engine plays a full headless 3p game).
 
 ## What this is
 
