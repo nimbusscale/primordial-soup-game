@@ -1,0 +1,28 @@
+{
+  "name": "primordial-soup",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/shared",
+    "packages/engine",
+    "packages/bots",
+    "apps/server",
+    "apps/client"
+  ],
+  "scripts": {
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dev:server": "npm -w @ps/server run dev",
+    "dev:client": "npm -w @ps/client run dev"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.10",
+    "typescript": "5.4.5",
+    "vitest": "1.6.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
