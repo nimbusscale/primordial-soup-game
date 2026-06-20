@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M7 — Engine: Phase 4 cell division** (M0–M6 complete).
+**M8 — Engine: Phase 5 natural deaths** (M0–M7 complete).
 
 ## What this is
 

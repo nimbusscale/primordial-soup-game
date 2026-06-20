@@ -12,6 +12,7 @@ import { applyAmoebaAction, applySetMoveDirection } from './phases/phase1.js';
 import { applyFeed } from './phases/feeding.js';
 import { applyBalanceDefect } from './phases/phase2.js';
 import { applyBuyGene, applyPassBuying } from './phases/phase3.js';
+import { applyDivide, applyPassDivision } from './phases/phase4.js';
 
 function applyAction(
   state: GameState,
@@ -52,7 +53,12 @@ function applyAction(
       if (action.type === 'pass_buying') return applyPassBuying(state, events);
       return `expected buy_gene/pass_buying, got ${action.type}`;
 
-    // Later decision kinds (divide_amoebas, …) land in M7+.
+    case 'divide_amoebas':
+      if (action.type === 'divide') return applyDivide(state, action, events);
+      if (action.type === 'pass_division') return applyPassDivision(state, events);
+      return `expected divide/pass_division, got ${action.type}`;
+
+    // Later decision kinds land in M8+.
     default:
       return `decision kind '${decision.kind}' is not yet implemented`;
   }

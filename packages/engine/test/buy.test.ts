@@ -87,11 +87,17 @@ describe('Phase 3 gene buying (BUY-*)', () => {
     runScenario(
       scn('BUY-05', buyState({ bp: 7, genes: [] }), [
         { seat: 'seat-0', action: { type: 'buy_gene', gene: 'INTELLIGENCE' } },
-        { seat: 'seat-0', action: { type: 'buy_gene', gene: 'MOVEMENT_I' } },
+        {
+          seat: 'seat-0',
+          action: { type: 'buy_gene', gene: 'MOVEMENT_I' },
+          // 7 − 2 − 3 = 2 BP left after both buys (checked before the +10 grant at Phase 4 start)
+          assert: [
+            { path: 'player("seat-0").bp', equals: 2 },
+            { path: 'player("seat-0").genes', equals: ['INTELLIGENCE', 'MOVEMENT_I'] },
+          ],
+        },
         { seat: 'seat-0', action: { type: 'pass_buying' } },
       ], [
-        { path: 'player("seat-0").genes', equals: ['INTELLIGENCE', 'MOVEMENT_I'] },
-        { path: 'player("seat-0").bp', equals: 2 },
         { path: 'phase', equals: 'phase4_division' }, // moved on from buying
       ]),
     );
