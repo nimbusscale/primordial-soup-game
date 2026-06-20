@@ -39,14 +39,21 @@ export interface GeneDef {
   prerequisite: GeneId[] | null;
   /** Whether this gene introduces a cross-seat (reactive) decision — the M15 combat group. */
   reactive: boolean;
+  /**
+   * True for genes whose ONLY effects are combat (M15) and therefore have no reachable
+   * effect during the MVP loop (M2–M14). Such genes are excluded from the offered buy
+   * options until combat lands. (PERSISTENCE/MOVEMENT_II are NOT combat-only: they carry an
+   * implemented movement effect, so they remain available.)
+   */
+  combatOnly: boolean;
   /** Value on the Phase 6 gene-card advance table (advanced = 2, RAY PROTECTION = 0, else 1). */
   advancementCardValue: 0 | 1 | 2;
   effects: GeneEffectTag[];
 }
 
-// Helper to keep the table terse.
-function gene(def: GeneDef): GeneDef {
-  return def;
+// Helper to keep the table terse; combatOnly defaults to false.
+function gene(def: Omit<GeneDef, 'combatOnly'> & { combatOnly?: boolean }): GeneDef {
+  return { ...def, combatOnly: def.combatOnly ?? false };
 }
 
 export const GENES: Readonly<Record<GeneId, GeneDef>> = {
@@ -73,12 +80,12 @@ export const GENES: Readonly<Record<GeneId, GeneDef>> = {
   }),
   DEFENSE: gene({
     id: 'DEFENSE', displayName: 'Defense', price: 4, mutationPoints: 4,
-    copies: { 3: 1, 4: 1 }, isAdvanced: false, prerequisite: null, reactive: true,
+    copies: { 3: 1, 4: 1 }, isAdvanced: false, prerequisite: null, reactive: true, combatOnly: true,
     advancementCardValue: 1, effects: ['defense'],
   }),
   ESCAPE: gene({
     id: 'ESCAPE', displayName: 'Escape', price: 4, mutationPoints: 4,
-    copies: { 3: 1, 4: 2 }, isAdvanced: false, prerequisite: null, reactive: true,
+    copies: { 3: 1, 4: 2 }, isAdvanced: false, prerequisite: null, reactive: true, combatOnly: true,
     advancementCardValue: 1, effects: ['escape'],
   }),
   SUBSTITUTION: gene({
@@ -118,12 +125,12 @@ export const GENES: Readonly<Record<GeneId, GeneDef>> = {
   }),
   STRUGGLE_FOR_SURVIVAL: gene({
     id: 'STRUGGLE_FOR_SURVIVAL', displayName: 'Struggle for Survival', price: 6, mutationPoints: 4,
-    copies: { 3: 2, 4: 2 }, isAdvanced: false, prerequisite: null, reactive: true,
+    copies: { 3: 2, 4: 2 }, isAdvanced: false, prerequisite: null, reactive: true, combatOnly: true,
     advancementCardValue: 1, effects: ['struggle'],
   }),
   PARASITISM: gene({
     id: 'PARASITISM', displayName: 'Parasitism', price: 6, mutationPoints: 5,
-    copies: { 3: 0, 4: 1 }, isAdvanced: false, prerequisite: null, reactive: true,
+    copies: { 3: 0, 4: 1 }, isAdvanced: false, prerequisite: null, reactive: true, combatOnly: true,
     advancementCardValue: 1, effects: ['feed_parasitism'],
   }),
   DIVISION_RATE: gene({
@@ -145,12 +152,12 @@ export const GENES: Readonly<Record<GeneId, GeneDef>> = {
   }),
   AGGRESSION: gene({
     id: 'AGGRESSION', displayName: 'Aggression', price: 5, mutationPoints: 5,
-    copies: { 3: 1, 4: 1 }, isAdvanced: true, prerequisite: ['STRUGGLE_FOR_SURVIVAL'], reactive: true,
+    copies: { 3: 1, 4: 1 }, isAdvanced: true, prerequisite: ['STRUGGLE_FOR_SURVIVAL'], reactive: true, combatOnly: true,
     advancementCardValue: 2, effects: ['struggle', 'aggression'],
   }),
   ARMOR: gene({
     id: 'ARMOR', displayName: 'Armor', price: 6, mutationPoints: 6,
-    copies: { 3: 1, 4: 1 }, isAdvanced: true, prerequisite: ['DEFENSE', 'ESCAPE'], reactive: true,
+    copies: { 3: 1, 4: 1 }, isAdvanced: true, prerequisite: ['DEFENSE', 'ESCAPE'], reactive: true, combatOnly: true,
     advancementCardValue: 2, effects: ['armor'],
   }),
 };

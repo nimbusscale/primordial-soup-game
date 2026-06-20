@@ -107,8 +107,10 @@ export interface DefectContext {
   excessMp: number; // must balance this many points (locked-in value)
 }
 export interface BuyGenesContext {
-  // options are in legalActions
-  placeholder?: never;
+  // Genes this seat has bought during THIS Phase 3 visit. Used to enforce the rule that a
+  // basic gene must be held a full prior round before it can be upgraded (spec §8); the
+  // concrete buy options are in legalActions.
+  boughtThisRound: GeneId[];
 }
 export interface DivideAmoebasContext {
   // options are in legalActions

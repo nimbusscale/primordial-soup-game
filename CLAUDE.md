@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M6 — Engine: Phase 3 gene buying** (M0–M5 complete).
+**M7 — Engine: Phase 4 cell division** (M0–M6 complete).
 
 ## What this is
 

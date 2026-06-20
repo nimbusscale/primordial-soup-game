@@ -52,8 +52,9 @@ describe('Phase 2 environment & gene defects (DEFECT-*)', () => {
         phase1ToPhase2({ round: 1, genes: ['SPEED', 'DIVISION_RATE', 'STREAMLINING'], oldCard: { id: 'env-01', ozoneThickness: 10, drift: 'none' }, deck: ['env-10', 'env-02'] }),
         [{ seat: 'seat-0', action: { type: 'drift', amoebaId: 1 } }],
         [
-          { path: 'currentDecision', equals: null }, // proceeded past phase 2; no defect decision
+          // No defect in round 1: phase proceeds to buying, not a balance_gene_defect decision.
           { path: 'phase', equals: 'phase3_genes' },
+          { path: 'currentDecision.kind', equals: 'buy_genes' },
         ],
       ),
     );

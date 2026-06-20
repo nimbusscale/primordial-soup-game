@@ -11,6 +11,7 @@ import { applyPlaceStartingAmoeba } from './setup.js';
 import { applyAmoebaAction, applySetMoveDirection } from './phases/phase1.js';
 import { applyFeed } from './phases/feeding.js';
 import { applyBalanceDefect } from './phases/phase2.js';
+import { applyBuyGene, applyPassBuying } from './phases/phase3.js';
 
 function applyAction(
   state: GameState,
@@ -46,7 +47,12 @@ function applyAction(
       if (action.type !== 'balance_defect') return `expected balance_defect, got ${action.type}`;
       return applyBalanceDefect(state, action, events);
 
-    // Later decision kinds (buy_genes, …) land in M6+.
+    case 'buy_genes':
+      if (action.type === 'buy_gene') return applyBuyGene(state, action, events);
+      if (action.type === 'pass_buying') return applyPassBuying(state, events);
+      return `expected buy_gene/pass_buying, got ${action.type}`;
+
+    // Later decision kinds (divide_amoebas, …) land in M7+.
     default:
       return `decision kind '${decision.kind}' is not yet implemented`;
   }
