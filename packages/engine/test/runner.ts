@@ -38,6 +38,7 @@ export type Assertion =
 export interface Step {
   seat: PlayerId | '<current>';
   action: GameAction;
+  assertBefore?: Assertion[]; // checked against the pre-action state (e.g. legalActions on the current decision)
   expectEvents?: DeepPartial<GameEvent>[];
   expectReject?: { reasonMatches?: string };
   assert?: Assertion[];
@@ -260,6 +261,7 @@ export function runScenario(scenario: Scenario): RunResult {
     if (step.seat !== '<current>') {
       expect(state.currentDecision?.seat, `${ctx}: expected seat ${step.seat} to be current`).toBe(step.seat);
     }
+    for (const a of step.assertBefore ?? []) checkAssertion(state, a, `${ctx} (before)`);
     const res = reduce(state, step.action, rng);
 
     if (step.expectReject) {

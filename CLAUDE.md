@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M3 — Engine: Phase 1 movement** (M0–M2 complete).
+**M4 — Engine: Phase 1 feeding** (M0–M3 complete).
 
 ## What this is
 

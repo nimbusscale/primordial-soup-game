@@ -8,11 +8,12 @@ import type { Rng } from './rng.js';
 import type { ReduceResult } from './types.js';
 import { cloneState } from './state-helpers.js';
 import { applyPlaceStartingAmoeba } from './setup.js';
+import { applyAmoebaAction, applySetMoveDirection } from './phases/phase1.js';
 
 function applyAction(
   state: GameState,
   action: GameAction,
-  _rng: Rng,
+  rng: Rng,
   events: GameEvent[],
 ): string | null {
   const decision = state.currentDecision!;
@@ -23,7 +24,19 @@ function applyAction(
       }
       return applyPlaceStartingAmoeba(state, action, events);
 
-    // Later decision kinds (amoeba_action, amoeba_feed, …) land in M3+.
+    case 'amoeba_action':
+      if (action.type !== 'drift' && action.type !== 'stay' && action.type !== 'move') {
+        return `expected drift/stay/move, got ${action.type}`;
+      }
+      return applyAmoebaAction(state, action, rng, events);
+
+    case 'choose_move_direction':
+      if (action.type !== 'set_move_direction') {
+        return `expected set_move_direction, got ${action.type}`;
+      }
+      return applySetMoveDirection(state, action, rng, events);
+
+    // Later decision kinds (amoeba_feed, …) land in M4+.
     default:
       return `decision kind '${decision.kind}' is not yet implemented`;
   }

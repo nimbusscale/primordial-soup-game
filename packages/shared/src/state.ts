@@ -81,6 +81,15 @@ export interface FeedContext {
 export interface MoveDirectionContext {
   amoebaId: AmoebaId;
   cellId: CellId;
+  // Engine bookkeeping carried across the choose_move_direction sub-decision (protocol §5
+  // leaves sub-choice sequencing to the engine). `allowedDirections` are the legal
+  // set_move_direction choices; the rest let the engine finish the move (and any SPEED
+  // second move / TENTACLE carry) once a direction is picked.
+  allowedDirections: Direction[];
+  stepBpSpent: number; // bp already spent for this step (reported in the moved event)
+  rollForEvent: number; // die value to report in the moved event (0 if no die was drawn)
+  carry?: Partial<Record<Color, number>>; // TENTACLE cubes to carry with this step
+  freeMovesOwed: number; // SPEED: free move-steps still owed after this one completes
 }
 export interface StruggleTargetContext {
   attackerId: AmoebaId;
