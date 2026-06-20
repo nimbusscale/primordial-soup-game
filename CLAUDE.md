@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M9 — Engine: Phase 6 scoring + game end** (M0–M8 complete).
+**M10 — Engine integration: full headless 3p game** (M0–M9 complete).
 
 ## What this is
 
