@@ -10,6 +10,7 @@ import { cloneState } from './state-helpers.js';
 import { applyPlaceStartingAmoeba } from './setup.js';
 import { applyAmoebaAction, applySetMoveDirection } from './phases/phase1.js';
 import { applyFeed } from './phases/feeding.js';
+import { applyBalanceDefect } from './phases/phase2.js';
 
 function applyAction(
   state: GameState,
@@ -41,7 +42,11 @@ function applyAction(
       if (action.type !== 'feed') return `expected feed, got ${action.type}`;
       return applyFeed(state, action, events);
 
-    // Later decision kinds (balance_gene_defect, …) land in M5+.
+    case 'balance_gene_defect':
+      if (action.type !== 'balance_defect') return `expected balance_defect, got ${action.type}`;
+      return applyBalanceDefect(state, action, events);
+
+    // Later decision kinds (buy_genes, …) land in M6+.
     default:
       return `decision kind '${decision.kind}' is not yet implemented`;
   }

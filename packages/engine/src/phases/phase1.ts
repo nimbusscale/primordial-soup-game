@@ -34,6 +34,7 @@ import {
   hasTentacle,
 } from '../genes/capabilities.js';
 import { beginFeeding } from './feeding.js';
+import { beginPhase2 } from './phase2.js';
 
 // ── Geometry / cost helpers ──────────────────────────────────────────────────
 
@@ -416,12 +417,9 @@ export function advanceToNextActor(
   endPhase1(state, events);
 }
 
-/**
- * End of Phase 1. M5 replaces this stub with the transition into Phase 2; until then it
- * leaves the engine with no pending decision (only reached by movement-only test states).
- */
-function endPhase1(state: GameState, _events: GameEvent[]): void {
-  state.currentDecision = null;
+/** End of Phase 1 → Phase 2 (environment reveal + gene defects). */
+function endPhase1(state: GameState, events: GameEvent[]): void {
+  beginPhase2(state, events);
 }
 
 export function beginPhase1(state: GameState, events: GameEvent[]): void {

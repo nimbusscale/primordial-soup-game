@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M5 — Engine: Phase 2 environment + gene defects** (M0–M4 complete).
+**M6 — Engine: Phase 3 gene buying** (M0–M5 complete).
 
 ## What this is
 
