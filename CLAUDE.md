@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M4 — Engine: Phase 1 feeding** (M0–M3 complete).
+**M5 — Engine: Phase 2 environment + gene defects** (M0–M4 complete).
 
 ## What this is
 

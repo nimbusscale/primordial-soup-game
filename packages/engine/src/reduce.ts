@@ -9,6 +9,7 @@ import type { ReduceResult } from './types.js';
 import { cloneState } from './state-helpers.js';
 import { applyPlaceStartingAmoeba } from './setup.js';
 import { applyAmoebaAction, applySetMoveDirection } from './phases/phase1.js';
+import { applyFeed } from './phases/feeding.js';
 
 function applyAction(
   state: GameState,
@@ -36,7 +37,11 @@ function applyAction(
       }
       return applySetMoveDirection(state, action, rng, events);
 
-    // Later decision kinds (amoeba_feed, …) land in M4+.
+    case 'amoeba_feed':
+      if (action.type !== 'feed') return `expected feed, got ${action.type}`;
+      return applyFeed(state, action, events);
+
+    // Later decision kinds (balance_gene_defect, …) land in M5+.
     default:
       return `decision kind '${decision.kind}' is not yet implemented`;
   }

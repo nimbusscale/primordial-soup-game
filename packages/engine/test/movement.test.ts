@@ -217,8 +217,7 @@ describe('Phase 1 movement (MOVE-*)', () => {
         { seat: 'seat-0', action: { type: 'move', amoebaId: 2, carry: { green: 2 } }, expectEvents: [{ type: 'moved', from: '1,1', to: '2,1' }] },
       ], [
         { path: 'cell("1,1").cubes.green', absent: true },
-        // baseline cell 2,1 already holds green:2; carrying 2 more makes 4
-        { path: 'cell("2,1").cubes.green', equals: 4 },
+        { path: 'cell("2,1").cubes.green', equals: 2 },
         { path: 'amoeba("seat-0",2).location', equals: '2,1' },
       ]),
     );

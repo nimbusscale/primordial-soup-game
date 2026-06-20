@@ -33,6 +33,7 @@ import {
   hasStreamlining,
   hasTentacle,
 } from '../genes/capabilities.js';
+import { beginFeeding } from './feeding.js';
 
 // ── Geometry / cost helpers ──────────────────────────────────────────────────
 
@@ -380,11 +381,11 @@ export function applySetMoveDirection(
 // ── Turn flow ────────────────────────────────────────────────────────────────
 
 /**
- * Hook called once an amoeba has finished moving. In M3 we advance straight to the next
- * actor; M4 replaces this with the feeding step before advancing.
+ * Hook called once an amoeba has finished moving: it now feeds (or starves). beginFeeding
+ * auto-resolves a forced/single outcome, or issues an amoeba_feed decision.
  */
 function onMovementComplete(state: GameState, seat: PlayerId, amoeba: Amoeba, events: GameEvent[]): void {
-  advanceToNextActor(state, seat, amoeba.id, events);
+  beginFeeding(state, seat, amoeba, events);
 }
 
 /** Find the next amoeba to act (numerical order within a seat, then ascending seats). */

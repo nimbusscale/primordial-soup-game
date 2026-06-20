@@ -5,6 +5,7 @@
 import type { GameAction, GameState } from '@ps/shared';
 import { legalPlacementActions } from './setup.js';
 import { legalAmoebaActions, legalMoveDirections } from './phases/phase1.js';
+import { legalFeedActions } from './phases/feeding.js';
 
 export function legalActions(state: GameState): GameAction[] {
   const decision = state.currentDecision;
@@ -16,6 +17,8 @@ export function legalActions(state: GameState): GameAction[] {
       return legalAmoebaActions(state, decision.seat);
     case 'choose_move_direction':
       return legalMoveDirections(state);
+    case 'amoeba_feed':
+      return legalFeedActions(state, decision.seat);
     default:
       return [];
   }

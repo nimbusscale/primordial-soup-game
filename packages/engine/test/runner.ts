@@ -69,12 +69,12 @@ function colorsFor(playerCount: number): Color[] {
 /** A complete, valid post-setup GameState onto which a partial `given.state` is merged. */
 export function makeBaselineState(playerCount: number): GameState {
   const colors = colorsFor(playerCount);
+  // Cells start EMPTY in the baseline so a partial `given.state` controls cube counts
+  // exactly (a patch can add cubes but cannot remove a baseline color).
   const board: GameState['board'] = {};
   for (const id of BOARD_CELLS) {
     const [col, row] = id.split(',').map(Number) as [number, number];
-    const cubes: Partial<Record<Color, number>> = {};
-    for (const c of colors) cubes[c] = 2;
-    board[id] = { id, col, row, cubes };
+    board[id] = { id, col, row, cubes: {} };
   }
   const supply: Record<Color, number> = { red: 0, green: 0, blue: 0, yellow: 0 };
   for (const c of colors) supply[c] = 7;
