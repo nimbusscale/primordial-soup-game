@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M1 — `shared` types + static configuration** (M0 complete).
+**M2 — Engine: setup / initial state** (M0, M1 complete).
 
 ## What this is
 
