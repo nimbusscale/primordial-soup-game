@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M2 — Engine: setup / initial state** (M0, M1 complete).
+**M3 — Engine: Phase 1 movement** (M0–M2 complete).
 
 ## What this is
 
@@ -47,8 +47,9 @@ npm install                      # bootstrap the workspace (writes/commits packa
 npm run typecheck                # type-check every workspace (tsc --noEmit per package)
 npm test                         # run the full Vitest suite once
 npm run test:watch               # Vitest in watch mode
-npm -w packages/shared run typecheck   # type-check one workspace
-npm -w packages/engine test            # run one workspace's tests (filter via vitest)
+npm -w @ps/shared run typecheck        # type-check one workspace
+npx vitest run packages/engine         # run one package's tests
+npx vitest run -t SETUP-01             # run tests matching a name
 # server / client dev servers land in later milestones:
 npm run dev:server               # (M11+) tsx watch the server
 npm run dev:client               # (M13+) vite dev server
