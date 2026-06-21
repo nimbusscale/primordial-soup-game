@@ -159,4 +159,46 @@ describe('M11 — server loop', () => {
 
     for (const c of clients) c.close();
   });
+
+  it('reconnecting re-presents the token and reloads the CURRENT snapshot (M12)', async () => {
+    const created = await postCreate(3, 11);
+    const tokenByLink = new Map(created.seats.map((s) => [s.playerId, tokenFromLink(s.link)]));
+
+    // Join all three; find the current actor and make one placement to advance state.
+    const clients: Client[] = [];
+    const seatOf = new Map<Client, string>();
+    let currentClient: Client | null = null;
+    let currentSnap: Extract<ServerMessage, { type: 'snapshot' }> | null = null;
+    for (const seat of created.seats) {
+      const c = await openClient();
+      c.send({ type: 'join', gameId: created.gameId, token: tokenByLink.get(seat.playerId)! });
+      const welcome = await c.next();
+      if (welcome.type === 'welcome') seatOf.set(c, welcome.you);
+      const snap = await c.next();
+      if (snap.type === 'snapshot' && snap.legalActions.length > 0) {
+        currentClient = c;
+        currentSnap = snap;
+      }
+      clients.push(c);
+    }
+    currentClient!.send({ type: 'intent', action: currentSnap!.legalActions[0] as GameAction });
+    await Promise.all(clients.map((c) => c.next())); // drain the broadcast
+    for (const c of clients) c.close();
+
+    // A brand-new socket presenting the same token reloads the current (advanced) snapshot.
+    const reconnect = await openClient();
+    const currentSeat = seatOf.get(currentClient!)!;
+    reconnect.send({ type: 'join', gameId: created.gameId, token: tokenByLink.get(currentSeat)! });
+    const welcome = await reconnect.next();
+    expect(welcome.type).toBe('welcome');
+    const snap = await reconnect.next();
+    expect(snap.type).toBe('snapshot');
+    if (snap.type === 'snapshot') {
+      const onBoard = snap.state.seatOrder
+        .flatMap((s) => snap.state.players[s]!.amoebas)
+        .filter((a) => a.location !== null);
+      expect(onBoard.length).toBeGreaterThanOrEqual(1); // the placement is reflected
+    }
+    reconnect.close();
+  });
 });

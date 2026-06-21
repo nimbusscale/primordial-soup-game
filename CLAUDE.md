@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M12 — Join-link flow end to end** (M0–M11 complete; server runs the validate→reduce→broadcast loop).
+**M13 — React client** (M0–M12 complete; client connects, joins, reloads snapshot; bare UI).
 
 ## What this is
 
