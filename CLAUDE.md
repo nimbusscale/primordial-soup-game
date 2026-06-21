@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M13 — React client** (M0–M12 complete; client connects, joins, reloads snapshot; bare UI).
+**M14 — Playable full non-combat 3p game** (M0–M13 complete; client renders board/panel and acts from legalActions).
 
 ## What this is
 
