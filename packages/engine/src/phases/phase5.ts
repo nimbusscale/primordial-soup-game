@@ -8,7 +8,7 @@ import { DEATH_CUBES_PER_COLOR, DEATH_DP_DEFAULT, DEATH_DP_LONGEVITY } from '@ps
 import { onBoardAmoebas, placeCubesFromSupply } from '../state-helpers.js';
 import { hasLongevity } from '../genes/capabilities.js';
 import { descendingOrder } from '../turn-order.js';
-import { beginPhase6 } from './phase6.js';
+import { beginAggression } from './combat.js';
 
 export function beginPhase5(state: GameState, events: GameEvent[]): void {
   state.phase = 'phase5_deaths';
@@ -33,5 +33,6 @@ export function beginPhase5(state: GameState, events: GameEvent[]): void {
     }
   }
 
-  beginPhase6(state, events);
+  // AGGRESSION resolves after natural deaths (no-op if no one owns it), then Phase 6.
+  beginAggression(state, events);
 }

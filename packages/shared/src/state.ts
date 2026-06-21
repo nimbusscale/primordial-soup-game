@@ -95,13 +95,21 @@ export interface StruggleTargetContext {
   attackerId: AmoebaId;
   cellId: CellId;
 }
+// An attack in progress, awaiting the defender's response. Shared by attack_response
+// (Phase 1 struggle) and aggression_response (Phase 5 aggression). The availability flags
+// are engine bookkeeping for the DEFENSE/ESCAPE-once and PERSISTENCE-retry rules.
 export interface AttackResponseContext {
   attackerSeat: PlayerId;
   attackerId: AmoebaId;
+  defenderSeat: PlayerId;
   defenderId: AmoebaId;
   cellId: CellId;
   phase: 'phase1' | 'phase5';
   kind: 'struggle' | 'aggression';
+  defenseAvailable: boolean;
+  escapeAvailable: boolean;
+  persistenceAvailable: boolean;
+  attackerHasHolding: boolean;
 }
 export interface DefectContext {
   excessMp: number; // must balance this many points (locked-in value)
@@ -117,14 +125,9 @@ export interface DivideAmoebasContext {
   placeholder?: never;
 }
 export interface AggressionTargetContext {
-  cellId?: CellId; // optional framing; full options in legalActions
+  seat: PlayerId; // the attacking seat being offered its once-per-round aggression
 }
-export interface AggressionResponseContext {
-  attackerSeat: PlayerId;
-  attackerId: AmoebaId;
-  defenderId: AmoebaId;
-  cellId: CellId;
-}
+export type AggressionResponseContext = AttackResponseContext;
 
 export type DecisionContext =
   | PlaceStartingAmoebaContext

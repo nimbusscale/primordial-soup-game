@@ -13,6 +13,12 @@ import { applyFeed } from './phases/feeding.js';
 import { applyBalanceDefect } from './phases/phase2.js';
 import { applyBuyGene, applyPassBuying } from './phases/phase3.js';
 import { applyDivide, applyPassDivision } from './phases/phase4.js';
+import {
+  applyAggressionAttack,
+  applyAggressionPass,
+  applyAttackResponse,
+  applyStruggleAttack,
+} from './phases/combat.js';
 
 function applyAction(
   state: GameState,
@@ -58,7 +64,23 @@ function applyAction(
       if (action.type === 'pass_division') return applyPassDivision(state, events);
       return `expected divide/pass_division, got ${action.type}`;
 
-    // Later decision kinds land in M8+.
+    case 'struggle_target':
+      if (action.type === 'struggle_attack') return applyStruggleAttack(state, action, rng, events);
+      if (action.type === 'feed') return applyFeed(state, action, events); // decline → starve
+      return `expected struggle_attack/feed, got ${action.type}`;
+
+    case 'attack_response':
+    case 'aggression_response':
+      if (action.type === 'respond_defense' || action.type === 'respond_escape' || action.type === 'respond_none') {
+        return applyAttackResponse(state, action, rng, events);
+      }
+      return `expected respond_defense/escape/none, got ${action.type}`;
+
+    case 'aggression_target':
+      if (action.type === 'aggression_attack') return applyAggressionAttack(state, action, rng, events);
+      if (action.type === 'aggression_pass') return applyAggressionPass(state, events);
+      return `expected aggression_attack/aggression_pass, got ${action.type}`;
+
     default:
       return `decision kind '${decision.kind}' is not yet implemented`;
   }

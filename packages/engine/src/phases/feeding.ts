@@ -17,6 +17,7 @@ import { EXCRETION_CUBES, FEED_FOOD_COUNT } from '@ps/shared';
 import { getAmoeba, getPlayer, placeCubesFromSupply, takeCubesToSupply } from '../state-helpers.js';
 import { hasSubstitution } from '../genes/capabilities.js';
 import { advanceToNextActor } from './phase1.js';
+import { tryInitStruggle } from './combat.js';
 
 type EatCombo = Partial<Record<Color, number>>;
 
@@ -77,7 +78,7 @@ export function legalFeedActions(state: GameState, seat: PlayerId): GameAction[]
   return combos.map((eat) => ({ type: 'feed', amoebaId, eat }));
 }
 
-function resolveFeed(
+export function resolveFeed(
   state: GameState,
   seat: PlayerId,
   amoeba: Amoeba,
@@ -97,9 +98,24 @@ function resolveFeed(
   events.push({ type: 'fed', seat, amoebaId: amoeba.id, cellId, ate: eat, excreted });
 }
 
-function resolveStarve(state: GameState, seat: PlayerId, amoeba: Amoeba, events: GameEvent[]): void {
+export function resolveStarve(state: GameState, seat: PlayerId, amoeba: Amoeba, events: GameEvent[]): void {
   amoeba.dp += 1;
   events.push({ type: 'starved', seat, amoebaId: amoeba.id, cellId: amoeba.location! });
+}
+
+/** Feed at the current cell without offering struggle, then advance (used after a HOLDING
+ *  follow when the attacker may still eat at the destination). */
+export function feedThenAdvanceNoStruggle(state: GameState, seat: PlayerId, amoeba: Amoeba, events: GameEvent[]): void {
+  const combos = legalFeedCombos(state, seat, amoeba);
+  if (combos[0]) resolveFeed(state, seat, amoeba, combos[0], events);
+  else resolveStarve(state, seat, amoeba, events);
+  advanceToNextActor(state, seat, amoeba.id, events);
+}
+
+/** Make a starving amoeba take its DP and advance (used when struggle is declined/fails). */
+export function starveThenAdvance(state: GameState, seat: PlayerId, amoeba: Amoeba, events: GameEvent[]): void {
+  resolveStarve(state, seat, amoeba, events);
+  advanceToNextActor(state, seat, amoeba.id, events);
 }
 
 /**
@@ -109,6 +125,9 @@ function resolveStarve(state: GameState, seat: PlayerId, amoeba: Amoeba, events:
 export function beginFeeding(state: GameState, seat: PlayerId, amoeba: Amoeba, events: GameEvent[]): void {
   const combos = legalFeedCombos(state, seat, amoeba);
   if (combos.length === 0) {
+    // Starving: a STRUGGLE FOR SURVIVAL amoeba may attack a co-located amoeba instead of
+    // taking DP. tryInitStruggle issues a struggle_target decision if eligible.
+    if (tryInitStruggle(state, seat, amoeba, events)) return;
     resolveStarve(state, seat, amoeba, events);
     advanceToNextActor(state, seat, amoeba.id, events);
     return;

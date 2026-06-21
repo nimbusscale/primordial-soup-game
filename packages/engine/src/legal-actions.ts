@@ -9,6 +9,11 @@ import { legalFeedActions } from './phases/feeding.js';
 import { legalBalanceDefect } from './phases/phase2.js';
 import { legalBuyGenes } from './phases/phase3.js';
 import { legalDivideActions } from './phases/phase4.js';
+import {
+  legalAggressionTargets,
+  legalAttackResponse,
+  legalStruggleTargets,
+} from './phases/combat.js';
 
 export function legalActions(state: GameState): GameAction[] {
   const decision = state.currentDecision;
@@ -28,6 +33,13 @@ export function legalActions(state: GameState): GameAction[] {
       return legalBuyGenes(state, decision.seat);
     case 'divide_amoebas':
       return legalDivideActions(state, decision.seat);
+    case 'struggle_target':
+      return legalStruggleTargets(state);
+    case 'attack_response':
+    case 'aggression_response':
+      return legalAttackResponse(state);
+    case 'aggression_target':
+      return legalAggressionTargets(state);
     default:
       return [];
   }

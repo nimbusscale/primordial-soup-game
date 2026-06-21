@@ -25,3 +25,13 @@ export const hasDivisionRate = (p: PlayerState): boolean => hasGene(p, 'DIVISION
 export const hasSpores = (p: PlayerState): boolean => hasGene(p, 'SPORES');
 export const hasLongevity = (p: PlayerState): boolean => hasGene(p, 'LONGEVITY');
 export const hasRayProtection = (p: PlayerState): boolean => hasGene(p, 'RAY_PROTECTION');
+
+// Combat genes (M15).
+export const hasDefense = (p: PlayerState): boolean => hasGene(p, 'DEFENSE');
+export const hasEscape = (p: PlayerState): boolean => hasGene(p, 'ESCAPE');
+export const hasArmor = (p: PlayerState): boolean => hasGene(p, 'ARMOR');
+export const hasAggression = (p: PlayerState): boolean => hasGene(p, 'AGGRESSION');
+// STRUGGLE FOR SURVIVAL, and AGGRESSION which carries the same capability (spec §8).
+export const hasStruggle = (p: PlayerState): boolean =>
+  hasGene(p, 'STRUGGLE_FOR_SURVIVAL') || hasGene(p, 'AGGRESSION');
+export const hasPersistence = (p: PlayerState): boolean => hasGene(p, 'PERSISTENCE');

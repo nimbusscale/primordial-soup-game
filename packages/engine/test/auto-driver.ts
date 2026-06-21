@@ -59,9 +59,11 @@ function chooseAction(state: GameState): GameAction {
 
     case 'buy_genes': {
       const bought = (decision.context as { boughtThisRound: string[] }).boughtThisRound;
-      // Buy one affordable gene per visit when BP is comfortable, else pass.
+      // Buy one affordable NON-COMBAT gene per visit when BP is comfortable, else pass.
+      // (Skipping combat genes keeps GAME-01 a deterministic non-combat game regardless of
+      // whether combat is enabled.)
       if (bought.length === 0 && player.bp >= 6) {
-        const buy = legal.find((a) => a.type === 'buy_gene');
+        const buy = legal.find((a) => a.type === 'buy_gene' && !geneDef(a.gene).combatOnly);
         if (buy) return buy;
       }
       return { type: 'pass_buying' };

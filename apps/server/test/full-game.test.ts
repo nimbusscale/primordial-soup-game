@@ -7,6 +7,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import type { AddressInfo } from 'node:net';
 import { WebSocket } from 'ws';
 import type { CreateGameResponse, GameAction, GameState, PlayerId, ServerMessage } from '@ps/shared';
+import { geneDef } from '@ps/shared';
 import { createServer, type RunningServer } from '../src/index.js';
 
 let running: RunningServer;
@@ -65,7 +66,10 @@ function choose(state: GameState, legal: GameAction[], you: PlayerId): GameActio
       return legal.find((a) => a.type === 'balance_defect' && a.giveUp.length === 0) ?? legal[0]!;
     case 'buy_genes': {
       const bought = (d.context as { boughtThisRound?: string[] }).boughtThisRound ?? [];
-      if (bought.length === 0 && player.bp >= 6) { const buy = find('buy_gene'); if (buy) return buy; }
+      if (bought.length === 0 && player.bp >= 6) {
+        const buy = legal.find((a) => a.type === 'buy_gene' && !geneDef(a.gene).combatOnly);
+        if (buy) return buy;
+      }
       return find('pass_buying') ?? legal[0]!;
     }
     case 'divide_amoebas': {

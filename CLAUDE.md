@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M15 — Combat genes (reactive)** (M0–M14 complete; full non-combat 3p game playable end to end over WS).
+**M16 — Docker packaging (MVP release)** (M0–M15 complete; full 3p ruleset incl. reactive combat).
 
 ## What this is
 
