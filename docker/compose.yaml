@@ -1,0 +1,14 @@
+# Optional convenience compose file. Build & run:  docker compose -f docker/compose.yaml up --build
+services:
+  primordial-soup:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: primordial-soup
+    ports:
+      - "8787:8787"
+    environment:
+      PORT: "8787"
+      # Set to the externally reachable base URL so join links point at the right host.
+      PUBLIC_BASE_URL: "http://localhost:8787"
+      # SEED is optional; the server seeds per game from entropy when unset.

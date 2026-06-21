@@ -434,5 +434,7 @@ export function beginPhase1(state: GameState, events: GameEvent[]): void {
       return;
     }
   }
-  state.currentDecision = null;
+  // No on-board amoebas anywhere (e.g. every amoeba starved in prior rounds): nothing to
+  // move/feed, so advance straight to Phase 2 rather than dead-ending with no decision.
+  endPhase1(state, events);
 }

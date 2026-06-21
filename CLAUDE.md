@@ -4,7 +4,25 @@
 
 ## Current milestone
 
-**M16 — Docker packaging (MVP release)** (M0–M15 complete; full 3p ruleset incl. reactive combat).
+**MVP complete (M0–M16).** A deployable, rules-faithful 3-player game with the full
+3-player gene set including reactive combat. Post-MVP work (M17 4-player, M18 bots) is out
+of scope for this run.
+
+## Docker (M16, MVP release)
+
+One image serves the built client and the WebSocket endpoint on a single port.
+
+```bash
+docker build -f docker/Dockerfile -t primordial-soup .          # build the image
+docker run -p 8787:8787 -e PUBLIC_BASE_URL=http://localhost:8787 primordial-soup
+# then create a game and distribute the returned seat links:
+curl -s -XPOST localhost:8787/api/games -H 'content-type: application/json' -d '{"playerCount":3}'
+# or: docker compose -f docker/compose.yaml up --build
+```
+
+Env: `PORT` (default 8787), `PUBLIC_BASE_URL` (used to build join links), `CLIENT_DIST`
+(set in the image to the built client assets). The server bundle is a single self-contained
+JS file (esbuild), so the runtime image needs no node_modules.
 
 ## What this is
 
