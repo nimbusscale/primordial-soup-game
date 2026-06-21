@@ -4,7 +4,7 @@
 
 ## Current milestone
 
-**M14 — Playable full non-combat 3p game** (M0–M13 complete; client renders board/panel and acts from legalActions).
+**M15 — Combat genes (reactive)** (M0–M14 complete; full non-combat 3p game playable end to end over WS).
 
 ## What this is
 

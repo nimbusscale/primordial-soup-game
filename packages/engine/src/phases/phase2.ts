@@ -72,6 +72,17 @@ export function legalBalanceDefect(state: GameState, seat: PlayerId): GameAction
   for (const g of player.genes) {
     if (giveUpValue(g) >= excess) out.push({ type: 'balance_defect', giveUp: [g], payBp: 0 });
   }
+  // Always offer a guaranteed option: greedily give up genes until the difference is
+  // covered (giving up all genes always covers it, since giveUpValue ≥ MP contribution).
+  const greedy: GeneId[] = [];
+  let covered = 0;
+  for (const g of player.genes) {
+    if (covered >= excess) break;
+    greedy.push(g);
+    covered += giveUpValue(g);
+  }
+  const dup = out.some((a) => a.type === 'balance_defect' && a.giveUp.length === greedy.length && a.giveUp.every((x, i) => x === greedy[i]));
+  if (!dup) out.push({ type: 'balance_defect', giveUp: greedy, payBp: 0 });
   return out;
 }
 
