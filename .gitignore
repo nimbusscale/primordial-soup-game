@@ -1,3 +1,7 @@
+# Temporary UAT results (the per-run writeup; reviewed then discarded — never commit)
+UAT-results.local.md
+*.local.md
+
 # Logs
 logs
 *.log
